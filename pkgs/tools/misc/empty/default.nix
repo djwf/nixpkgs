@@ -10,14 +10,16 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
+  patches = [
+    ./0.6-Makefile.patch
+  ];
+
   nativeBuildInputs = [ which ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  # Allow installation prefix to be overridden, and fix the CC parameter order.
-  prePatch = ''
-    substituteInPlace Makefile \
-      --replace '\$\{LIBS\} -o empty empty.c' '-o empty empty.c \$\{LIBS\}'
+  postPatch = ''
+    rm empty
   '';
 
   meta = with lib; {
